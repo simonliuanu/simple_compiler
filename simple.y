@@ -12,14 +12,14 @@ program:
     ;
 
 statement:
-    | expr ';' {
+    expr ';' {
         printf("Result: %d\n", $1);
     }
     ;
 
 expr:
     expr '+' term { $$ = $1 + $3; }
-    | expr '-' term { $$ = $1 + $3; }
+    | expr '-' term { $$ = $1 - $3; }
     | term { $$ = $1; }
     ;
 
