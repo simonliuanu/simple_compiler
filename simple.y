@@ -1,6 +1,9 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+
+    int yylex();
+    void yyerror(const char *s);
 %}
 
 %token NUMBER
@@ -8,12 +11,13 @@
 %%
 
 program:
-    | program statement
+    statement
     ;
 
 statement:
      expr ';' {
         printf("Result: %d\n", $1);
+        exit(0);
     }
     ;
 

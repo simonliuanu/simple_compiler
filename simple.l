@@ -7,7 +7,7 @@
     yylval = atoi(yytext);
     return NUMBER;
 }
-[\t\n]+     {}
+[ \t\n]+     ;
 "+"         { return '+'; }
 "-"         { return '-'; }
 "*"         { return '*'; }
@@ -15,7 +15,7 @@
 "("         { return '('; }
 ")"         { return ')'; }
 ";"         { return ';'; }
-.           { return yytext[0]; }
+.           { printf("Unknown character: %s\n", yytext); }
 %%
 
 int yywrap() {

@@ -1,3 +1,4 @@
 test*
 lex.yy.c
 simple.tab*
+compiler
