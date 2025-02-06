@@ -12,7 +12,7 @@ program:
     ;
 
 statement:
-    expr ';' {
+     expr ';' {
         printf("Result: %d\n", $1);
     }
     ;
