@@ -1,17 +1,44 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
+
+    #define SYMTAB_SIZE 100
 
     int yylex();
     void yyerror(const char *s);
+
+    struct symbol {
+        char *name;
+        int value;
+    } symtab[SYMTAB_SIZE];
+    int symtab_count = 0;
+
+    int get_symbol_value(char *name);
+    void set_symbol_value(char *name, int value);
 %}
 
+%union {
+    int intval;
+    char *strval;
+}
+
 %token NUMBER
+%token <strval> IDENTIFIER
+%token IF ELSE WHILE PRINT
+%token ASSIGN EQ NEQ LT GT
+
+%type <intval> expr term factor condition
 
 %%
 
 program:
+    statement_list
+    ;
+
+statement_list:
     statement
+    | statement_list statement
     ;
 
 statement:
@@ -19,6 +46,14 @@ statement:
         printf("Result: %d\n", $1);
         exit(0);
     }
+    | IDENTIFIER ASSIGN expr ';' {
+        set_symbol_value($1, $3);
+        free($1);
+    }
+    | PRINT expr ';' { printf("%d\n", $2); }
+    | IF '(' condition ')' '{' statement_list '}' 
+    | IF '(' condition ')' '{' statement_list '}' ELSE '{' statement_list '}'
+    | WHILE '(' condition ')' '{' statement_list '}'
     ;
 
 expr:
