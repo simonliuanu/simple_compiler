@@ -56,6 +56,13 @@ statement:
     | WHILE '(' condition ')' '{' statement_list '}'
     ;
 
+condition:
+    expr EQ expr { $$ = $1 == $3; }
+    | expr NEQ expr { $$ = $1 != $3; }
+    | expr LT expr { $$ = $1 < $3; }
+    | expr GT expr { $$ = $1 > $3; }
+    ;
+
 expr:
     expr '+' term { $$ = $1 + $3; }
     | expr '-' term { $$ = $1 - $3; }
