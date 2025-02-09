@@ -14,11 +14,11 @@
 "<"         { return LT; }
 ">"         { return GT; }
 [a-zA-Z_][a-zA-Z0-9_]* {
-    yylval = strdup(yytext);
+    yylval.strval = strdup(yytext);
     return IDENTIFIER;
 }
 [0-9]+      {
-    yylval = atoi(yytext);
+    yylval.intval = atoi(yytext);
     return NUMBER;
 }
 [ \t\n]+     ;
