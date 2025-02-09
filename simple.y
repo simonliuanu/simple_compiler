@@ -106,7 +106,7 @@ void set_symbol_value(char *name, int value) {
             return;
         }
     }
-    if (symtab_count >= SYMTAB_SIZE) {
+    if (symtab_count < SYMTAB_SIZE) {
         symtab[symtab_count].name = strdup(name);
         symtab[symtab_count].value = value;
         symtab_count++;
