@@ -3,7 +3,7 @@
     #include <stdlib.h>
     #include <string.h>
 
-    #define SYMTAB_SIZE 100
+    #define SYMTAB_SIZE 1000
 
     int yylex();
     void yyerror(const char *s);
@@ -23,7 +23,7 @@
     char *strval;
 }
 
-%token NUMBER
+%token <intval> NUMBER
 %token <strval> IDENTIFIER
 %token IF ELSE WHILE PRINT
 %token ASSIGN EQ NEQ LT GT
@@ -85,9 +85,36 @@ term:
 factor:
     '(' expr ')' { $$ = $2; }
     | NUMBER     { $$ = $1; }
+    | IDENTIFIER { $$ = get_symbol_value($1); free($1); }
     ;
 
 %%
+
+int get_symbol_value(char *name) {
+    for (int i = 0; i < symtab_count; i++) {
+        if (strcmp(symtab[i].name, name) == 0) {
+            return symtab[i].value;
+        }
+    }
+    return 0;
+}
+
+void set_symbol_value(char *name, int value) {
+    for (int i = 0; i < symtab_count; i++) {
+        if (strcmp(symtab[i].name, name) == 0) {
+            symtab[i].value = value;
+            return;
+        }
+    }
+    if (symtab_count >= SYMTAB_SIZE) {
+        symtab[symtab_count].name = strdup(name);
+        symtab[symtab_count].value = value;
+        symtab_count++;
+    } else {
+        yyerror("Symbol table full");
+    }
+}
+
 
 int main() {
     printf("Enter an expression ending with a semicolon:\n");
